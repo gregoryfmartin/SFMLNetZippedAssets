@@ -31,11 +31,17 @@ namespace SFMLNetZippedAssets {
 
         private PlayerObject PO;
 
+        private AssetManager am;
+
+        private Sprite a;
+
         public GameCore () {
             Running = true;
             GameClock = null;
             MainWindow = null;
             PO = null;
+            am = null;
+            a = null;
         }
 
         public void Run () {
@@ -59,11 +65,18 @@ namespace SFMLNetZippedAssets {
             MainWindow.KDownHandler += this.CheckPlayerInputPressed;
             MainWindow.KUpHandler += this.CheckPlayerInputReleased;
 
+            am = new AssetManager ();
+            am.LoadAssets (@".\GameAssets.zip");
+
             PO = new PlayerObject (15.0f) {
                 FillColor = Color.Red
             };
 
+            a = new Sprite (am.LibraryTextures [10]);
+            a.Position = new Vector2f (50.0f, 50.0f);
+
             MainWindow.ToRender.Add (PO);
+            MainWindow.ToRender.Add (a);
 
             GameClock = new Clock ();
         }
