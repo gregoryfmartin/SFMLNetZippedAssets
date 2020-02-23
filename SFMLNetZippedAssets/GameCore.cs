@@ -72,7 +72,7 @@ namespace SFMLNetZippedAssets {
                 FillColor = Color.Red
             };
 
-            a = new Sprite (am.LibraryTextures [10]);
+            a = new Sprite (am.LibraryTextures ["whale"]);
             a.Position = new Vector2f (50.0f, 50.0f);
 
             MainWindow.ToRender.Add (PO);

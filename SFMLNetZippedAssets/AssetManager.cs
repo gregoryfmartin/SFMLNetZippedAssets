@@ -9,12 +9,12 @@ using SFML.Graphics;
 
 namespace SFMLNetZippedAssets {
     sealed class AssetManager {
-        private List<Texture> libraryTextures;
+        private Dictionary<String, Texture> libraryTextures;
 
-        public List<Texture> LibraryTextures { get { return libraryTextures; } }
+        public Dictionary<String, Texture> LibraryTextures { get { return libraryTextures; } }
 
         public AssetManager () {
-            libraryTextures = new List<Texture> ();
+            libraryTextures = new Dictionary<String, Texture> ();
         }
 
         public void LoadAssets (String archive) {
@@ -33,7 +33,8 @@ namespace SFMLNetZippedAssets {
                                 entry.Open ().CopyTo (ms);
                                 b = ms.ToArray ();
                             }
-                            libraryTextures.Add (new Texture (b));
+                            //libraryTextures.Add (new Texture (b));
+                            libraryTextures.Add (filename [0], new Texture (b));
                         }
                     }
                 }
