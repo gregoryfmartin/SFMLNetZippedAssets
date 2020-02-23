@@ -17,24 +17,25 @@ namespace SFMLNetZippedAssets {
             libraryTextures = new Dictionary<String, Texture> ();
         }
 
-        public void LoadAssets (String archive) {
+        public async void LoadAssets (String archive) {
             ZipArchive zipArchive = null;
 
             try {
-                zipArchive = ZipFile.OpenRead (archive);
+                zipArchive = await OpenZipFile (archive);
 
                 foreach (ZipArchiveEntry entry in zipArchive.Entries) {
                     String [] filename = entry.Name.Split (new char [] { '.' });
                     if (filename.Length > 1) {
                         // This is a file, not a directory
                         if (filename [1].Equals ("png") || filename [1].Equals ("jpg") || filename [1].Equals ("jpeg")) {
-                            byte [] b;
-                            using (MemoryStream ms = new MemoryStream ()) {
-                                entry.Open ().CopyTo (ms);
-                                b = ms.ToArray ();
-                            }
-                            //libraryTextures.Add (new Texture (b));
-                            libraryTextures.Add (filename [0], new Texture (b));
+                            //byte [] b;
+                            //using (MemoryStream ms = new MemoryStream ()) {
+                            //    entry.Open ().CopyTo (ms);
+                            //    b = ms.ToArray ();
+                            //}
+                            ////libraryTextures.Add (new Texture (b));
+                            //libraryTextures.Add (filename [0], new Texture (b));
+                            libraryTextures.Add (filename [0], (await CopyTextureMem (entry)));
                         }
                     }
                 }
@@ -42,6 +43,20 @@ namespace SFMLNetZippedAssets {
                 Console.WriteLine (e.Message);
                 Environment.Exit (-99);
             }
+        }
+
+        private async Task<ZipArchive> OpenZipFile (String archive) {
+            return ZipFile.OpenRead (archive);
+        }
+
+        private async Task<Texture> CopyTextureMem (ZipArchiveEntry entry) {
+            byte [] b;
+            using (MemoryStream ms = new MemoryStream ()) {
+                entry.Open ().CopyTo (ms);
+                b = ms.ToArray ();
+            }
+
+            return new Texture (b);
         }
     }
 }
